@@ -268,7 +268,7 @@ run_disk_check(){
 	fi
 
 	if [ -f "$CHKLOG" ] && [ "$(wc -c < $CHKLOG)" -gt "100000" ]; then
-		sed -i '1,100d' "$CHKLOG"
+		tail -c 50000 "$CHKLOG" > "$CHKLOG.tmp" && mv -f "$CHKLOG.tmp" "$CHKLOG"
 		sed -i "1s/^/Truncated log file, size over 100KB, on $(date)\n\n/" "$CHKLOG"
 		logger -t "$TAG" "Truncated $CHKLOG, size over 100KB"
 	fi
